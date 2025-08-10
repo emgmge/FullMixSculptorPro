@@ -23,6 +23,13 @@ set(PROJECT_SOURCES
     Source/AutoChopper.cpp
     Source/KeyDetector.h
     Source/KeyDetector.cpp
+    set(PROJECT_SOURCES
+    Source/PluginProcessor.cpp
+    ...
+    Source/PluginMain.cpp
+
+)
+
 )
 juce_add_plugin(FullMixSculptorPro
     PRODUCT_NAME "FullMix Sculptor Pro"
