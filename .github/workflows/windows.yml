@@ -1,0 +1,20 @@
+name: Build Windows VST3 (Bold EMG)
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main, master ]
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure (CMake, MSVC)
+        run: |
+          cmake -S . -B build -G "Visual Studio 17 2022" -A x64 -DCMAKE_BUILD_TYPE=Release
+      - name: Build
+        run: cmake --build build --config Release
+      - name: Upload VST3 artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: FullMixSculptorPro-Windows-VST3
+          path: build/**/*.vst3
