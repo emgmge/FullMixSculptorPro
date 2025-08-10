@@ -1,18 +1,32 @@
 name: Build Windows VST3 (Bold EMG)
+
 on:
   workflow_dispatch:
   push:
     branches: [ main, master ]
+
 jobs:
   build-windows:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
+
+      # Get Steinberg's official VST3 SDK for JUCE to build VST3
+      - name: Fetch VST3 SDK
+        run: git clone --depth 1 https://github.com/steinbergmedia/vst3sdk.git vst3sdk
+
       - name: Configure (CMake, MSVC)
-        run: |
-          cmake -S . -B build -G "Visual Studio 17 2022" -A x64 -DCMAKE_BUILD_TYPE=Release
+        run: >
+          cmake -S . -B build
+          -G "Visual Studio 17 2022" -A x64
+          -DCMAKE_BUILD_TYPE=Release
+          -DVST3_SDK_DIR=${{ github.workspace }}\vst3sdk
+          -DJUCE_BUILD_EXAMPLES=OFF
+          -DJUCE_BUILD_EXTRAS=OFF
+
       - name: Build
         run: cmake --build build --config Release
+
       - name: Upload VST3 artifact
         uses: actions/upload-artifact@v4
         with:
